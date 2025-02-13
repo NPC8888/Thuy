@@ -1,166 +1,101 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trái Tim Tỏ Tình</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị chuyến xe</title>
     <style>
-      body {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #000;
-        overflow: hidden;
-        font-family: "Arial", sans-serif;
-      }
-
-      .container {
-        position: relative;
-        text-align: center;
-      }
-
-      .heart {
-        position: relative;
-        width: 100px;
-        height: 90px;
-        animation: heartbeat 1.5s infinite, appear 2s ease-out forwards;
-        opacity: 0;
-      }
-
-      .heart::before,
-      .heart::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        width: 52px;
-        height: 80px;
-        background-color: red;
-        border-radius: 50px 50px 0 0;
-      }
-
-      .heart::before {
-        left: 50px;
-        transform: rotate(-45deg);
-        transform-origin: 0 100%;
-      }
-
-      .heart::after {
-        left: 0;
-        transform: rotate(45deg);
-        transform-origin: 100% 100%;
-      }
-
-      @keyframes heartbeat {
-        0% {
-          transform: scale(1);
-        }
-        25% {
-          transform: scale(1.1);
-        }
-        50% {
-          transform: scale(1);
-        }
-        75% {
-          transform: scale(1.1);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-
-      @keyframes appear {
-        0% {
-          opacity: 0;
-          transform: scale(0.5) rotate(0deg);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1) rotate(360deg);
-        }
-      }
-
-      .text {
-        position: absolute;
-        bottom: -50px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 24px;
-        color: #ff4d4d;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(255, 77, 77, 0.5);
-        animation: text-appear 3s ease-out forwards;
-        opacity: 0;
-      }
-
-      @keyframes text-appear {
-        0% {
-          opacity: 0;
-          transform: translateX(-50%) translateY(20px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateX(-50%) translateY(0);
-        }
-      }
-
-      .particles {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-      }
-
-      .particle {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background-color: #ff4d4d;
-        border-radius: 50%;
-        opacity: 0;
-        animation: explode 2s ease-out forwards;
-      }
-
-      @keyframes explode {
-        0% {
-          opacity: 1;
-          transform: scale(0);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        100% {
-          opacity: 0;
-          transform: scale(2);
-        }
-      }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        .container { max-width: 800px; margin: 30px auto; padding: 20px; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); border-radius: 8px; text-align: center; }
+        h1 { margin-bottom: 20px; color: #333; }
+        .form-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        input, button { padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
+        input { flex: 1; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #218838; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: #f8f9fa; }
+        td button { background-color: #dc3545; margin: 2px; color: white; border: none; padding: 5px; cursor: pointer; border-radius: 3px; }
+        td button.edit { background-color: #ffc107; }
+        td button:hover { opacity: 0.8; }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <div class="heart"></div>
-      <div class="text">Yêu Thúy của anh</div>
-      <div class="particles" id="particles"></div>
+        <h1>Quản trị chuyến xe</h1>
+        <div class="form-container">
+            <input type="text" id="busName" placeholder="Tên nhà xe">
+            <input type="text" id="route" placeholder="Tuyến đường">
+            <input type="datetime-local" id="departureTime">
+            <input type="number" id="price" placeholder="Giá vé (VND)">
+            <button onclick="addBus()">Thêm chuyến</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tên nhà xe</th>
+                    <th>Tuyến đường</th>
+                    <th>Giờ khởi hành</th>
+                    <th>Giá vé</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="busList"></tbody>
+        </table>
     </div>
-
     <script>
-      // Tạo hiệu ứng mảnh vỡ
-      const particlesContainer = document.getElementById("particles");
-      const numParticles = 50;
-
-      for (let i = 0; i < numParticles; i++) {
-        const particle = document.createElement("div");
-        particle.classList.add("particle");
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.top = `${Math.random() * 100}%`;
-        particle.style.animationDelay = `${Math.random() * 2}s`;
-        particlesContainer.appendChild(particle);
-      }
+        document.addEventListener("DOMContentLoaded", loadBuses);
+        let busList = JSON.parse(localStorage.getItem("buses")) || [];
+        function addBus() {
+            let busName = document.getElementById("busName").value.trim(),
+                route = document.getElementById("route").value.trim(),
+                departureTime = document.getElementById("departureTime").value,
+                price = document.getElementById("price").value.trim();
+            if (!busName || !route || !departureTime || !price) return alert("Vui lòng nhập đầy đủ thông tin!");
+            busList.push({ id: Date.now(), busName, route, departureTime, price });
+            saveBuses();
+            renderBuses();
+            document.querySelectorAll(".form-container input").forEach(input => input.value = "");
+        }
+        function renderBuses() {
+            let busTable = document.getElementById("busList");
+            busTable.innerHTML = "";
+            busList.forEach(bus => {
+                let row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${bus.busName}</td>
+                    <td>${bus.route}</td>
+                    <td>${bus.departureTime}</td>
+                    <td>${bus.price} VND</td>
+                    <td>
+                        <button class="edit" onclick="editBus(${bus.id})">Sửa</button>
+                        <button onclick="deleteBus(${bus.id})">Xóa</button>
+                    </td>`;
+                busTable.appendChild(row);
+            });
+        }
+        function editBus(id) {
+            let bus = busList.find(b => b.id === id);
+            if (!bus) return;
+            document.getElementById("busName").value = bus.busName;
+            document.getElementById("route").value = bus.route;
+            document.getElementById("departureTime").value = bus.departureTime;
+            document.getElementById("price").value = bus.price;
+            deleteBus(id);
+        }
+        function deleteBus(id) {
+            busList = busList.filter(bus => bus.id !== id);
+            saveBuses();
+            renderBuses();
+        }
+        function saveBuses() {
+            localStorage.setItem("buses", JSON.stringify(busList));
+        }
+        function loadBuses() {
+            busList = JSON.parse(localStorage.getItem("buses")) || [];
+            renderBuses();
+        }
     </script>
-  </body>
+</body>
 </html>
