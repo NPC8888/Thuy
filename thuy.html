@@ -6,19 +6,31 @@
     <title>Quản trị chuyến xe</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        .container { max-width: 800px; margin: 30px auto; padding: 20px; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); border-radius: 8px; text-align: center; }
-        h1 { margin-bottom: 20px; color: #333; }
-        .form-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        input, button { padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
-        input { flex: 1; }
+        body { background-color: #f4f4f4; padding: 10px; }
+        .container { max-width: 900px; margin: auto; padding: 20px; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); border-radius: 8px; text-align: center; }
+        h1 { margin-bottom: 20px; color: #333; font-size: 24px; }
+
+        /* Form nhập dữ liệu */
+        .form-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; margin-bottom: 20px; }
+        input, button { padding: 10px; border-radius: 5px; border: 1px solid #ddd; font-size: 16px; }
+        input { flex: 1; min-width: 150px; }
         button { background-color: #28a745; color: white; border: none; cursor: pointer; transition: 0.3s; }
         button:hover { background-color: #218838; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        
+        /* Bảng hiển thị chuyến xe */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; min-width: 600px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 14px; }
         th { background-color: #f8f9fa; }
-        td button { background-color: #dc3545; margin: 2px; color: white; border: none; padding: 5px; cursor: pointer; border-radius: 3px; }
+        td button { background-color: #dc3545; margin: 2px; color: white; border: none; padding: 5px; cursor: pointer; border-radius: 3px; font-size: 14px; }
         td button.edit { background-color: #ffc107; }
         td button:hover { opacity: 0.8; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container { flex-direction: column; }
+            input, button { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -31,18 +43,20 @@
             <input type="number" id="price" placeholder="Giá vé (VND)">
             <button onclick="addBus()">Thêm chuyến</button>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Tên nhà xe</th>
-                    <th>Tuyến đường</th>
-                    <th>Giờ khởi hành</th>
-                    <th>Giá vé</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody id="busList"></tbody>
-        </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tên nhà xe</th>
+                        <th>Tuyến đường</th>
+                        <th>Giờ khởi hành</th>
+                        <th>Giá vé</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="busList"></tbody>
+            </table>
+        </div>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", loadBuses);
