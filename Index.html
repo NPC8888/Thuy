@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyen truong an</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+        }
+        .hand {
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+        .hand:hover {
+            transform: scale(1.2);
+        }
+        .name {
+            font-size: 50px;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+            background: linear-gradient(45deg, red, yellow, blue, purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 1s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px white; }
+            to { text-shadow: 0 0 20px white; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hand" onclick="showName()">🖕</div>
+    <div class="name" id="name">An</div>
+
+    <script>
+        function showName() {
+            const name = document.getElementById("name");
+            name.style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
