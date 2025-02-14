@@ -3,51 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nguyen truong an</title>
+    <title>Valentine Đẹp Nhất</title>
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ff9a9e, #fad0c4, #fad0c4);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
             flex-direction: column;
         }
-        .hand {
-            font-size: 100px;
+
+        .heart {
+            font-size: 80px;
             cursor: pointer;
-            transition: transform 0.3s ease-in-out;
+            animation: pulse 1s infinite alternate;
+            color: #ff4d6d;
+            text-shadow: 0 0 20px white;
         }
-        .hand:hover {
-            transform: scale(1.2);
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
         }
-        .name {
+
+        h1 {
             font-size: 50px;
             font-weight: bold;
-            margin-top: 20px;
+            text-align: center;
             display: none;
-            background: linear-gradient(45deg, red, yellow, blue, purple);
+            background: linear-gradient(45deg, red, yellow, blue, purple, pink, orange);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: glow 1s infinite alternate;
+            animation: glow 1s infinite alternate, rainbow 3s infinite linear;
         }
+
         @keyframes glow {
             from { text-shadow: 0 0 10px white; }
             to { text-shadow: 0 0 20px white; }
+        }
+
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Trái tim bay */
+        .heart-animation {
+            position: absolute;
+            font-size: 30px;
+            animation: floatUp 5s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Hiệu ứng pháo hoa */
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, yellow, orange, red);
+            border-radius: 50%;
+            animation: explode 1s ease-out;
+            opacity: 0;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(5); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="hand" onclick="showName()">🖕</div>
-    <div class="name" id="name">An</div>
+    <div class="heart" onclick="startEffect()">💖</div>
+    <h1 id="message">Chúc Vợ thúy Valentine mãi xinh đẹp,Chúc cho chúng ta mãi bên nhau</h1>
 
     <script>
-        function showName() {
-            const name = document.getElementById("name");
-            name.style.display = "block";
+        function startEffect() {
+            document.getElementById("message").style.display = "block";
+
+            // Tạo trái tim bay
+            createFloatingHearts(30);
+
+            // Hiệu ứng pháo hoa
+            createFireworks();
+        }
+
+        function createFloatingHearts(count) {
+            for (let i = 0; i < count; i++) {
+                let heart = document.createElement("div");
+                heart.classList.add("heart-animation");
+                heart.innerHTML = "💖";
+                heart.style.left = Math.random() * 100 + "vw"; 
+                heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 5000);
+            }
+        }
+
+        function createFireworks() {
+            for (let i = 0; i < 10; i++) {
+                let firework = document.createElement("div");
+                firework.classList.add("firework");
+                firework.style.left = Math.random() * 100 + "vw";
+                firework.style.top = Math.random() * 100 + "vh";
+                document.body.appendChild(firework);
+
+                setTimeout(() => firework.remove(), 1000);
+            }
         }
     </script>
 
